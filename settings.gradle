@@ -1,3 +1,4 @@
+include ':mTransaction'
 include ':mService'
 include ':mdatabase'
 include ':mcore'

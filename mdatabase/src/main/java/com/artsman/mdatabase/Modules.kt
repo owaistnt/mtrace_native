@@ -13,42 +13,40 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Inject
 import javax.inject.Named
+import javax.inject.Singleton
 
 
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule{
 
-    @Provides
-    fun providesDatabaseName(impl: DatabaseNameProviderImpl): DatabaseNameProvider{
-        return impl
-    }
+    lateinit var database: AppDatabase
 
-    @Named("MainDatabase")
-    @Provides
-    fun provideDatabase(@ApplicationContext applicationContext: Context, databaseNameProvider: DatabaseNameProvider): AppDatabase{
-            return Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java, databaseNameProvider.getString()
+    private fun getDatabase(context: Context): AppDatabase {
+        if (!::database.isInitialized) {
+            database = Room.databaseBuilder(
+                context,
+                AppDatabase::class.java,
+                "mtracedb"
             ).build()
         }
+        return database
+
+    }
+
+    @Provides
+    @Singleton
+    fun providesTransactionDao(@ApplicationContext context: Context): TransactionDao{
+        return getDatabase(context).transactionDao()
+    }
 }
 
 @Module
 @InstallIn(ActivityComponent::class)
-interface LocalProviderModule{
-    @Binds
-    fun providesLocalTransactions(localTransactionProvider: LocalTransactionProvider): ILocalTransactionProvider
-}
+object LocalProviderModule{
 
+    @Provides
+    fun providesLocalTransactions(localTransactionProvider: LocalTransactionProvider): ILocalTransactionProvider{return localTransactionProvider}
 
-interface DatabaseNameProvider{
-    fun getString(): String
-}
-
-class DatabaseNameProviderImpl @Inject constructor(): DatabaseNameProvider {
-    override fun getString(): String {
-        return "app_database"
-    }
 
 }

@@ -6,6 +6,7 @@
       <module name="mTrace.mdatabase" target="1.8" />
       <module name="mTrace.mdesign" target="1.8" />
       <module name="mTrace.mService" target="1.8" />
+      <module name="mTrace.mTransaction" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
