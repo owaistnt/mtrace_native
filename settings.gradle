@@ -1,3 +1,4 @@
+include ':mwidgets'
 include ':mTransaction'
 include ':mService'
 include ':mdatabase'
