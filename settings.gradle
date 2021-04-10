@@ -1,0 +1,6 @@
+include ':mService'
+include ':mdatabase'
+include ':mcore'
+include ':mdesign'
+include ':app'
+rootProject.name = "mTrace"
