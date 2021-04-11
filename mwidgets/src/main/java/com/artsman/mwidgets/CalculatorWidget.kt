@@ -10,7 +10,10 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.Button
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.artsman.mwidgets.databinding.WidgetLayoutCalculatorBinding
+import java.math.BigDecimal
 
 /**
  * TODO: document your custom view class.
@@ -90,5 +93,37 @@ class CalculatorWidget : ConstraintLayout {
 }
 
 class CalculatorViewModel(){
+    private val mStates=MutableLiveData<States>()
+    fun subcribe(): LiveData<States> {
+        return mStates
+    }
 
+    fun setAction(action: Actions) {
+        when(action){
+            Actions.Start -> mStates.postValue(States.Display("0"))
+        }
+    }
+
+    sealed class States{
+        data class Display(val value: String=""): States()
+    }
+
+    sealed class Actions{
+        object Start: Actions()
+    }
 }
+
+class Calculator{
+
+    fun calculate(a: BigDecimal, b: BigDecimal, operator: CalculatorWidget.OPERATOR): BigDecimal {
+        return when(operator){
+            CalculatorWidget.OPERATOR.ADD -> a+b
+            CalculatorWidget.OPERATOR.SUB -> a-b
+            CalculatorWidget.OPERATOR.PROD -> a*b
+            CalculatorWidget.OPERATOR.DIV -> a/b
+            CalculatorWidget.OPERATOR.NONE -> BigDecimal.ZERO
+        }
+    }
+}
+
+
