@@ -57,6 +57,9 @@ dependencies {
     testImplementation "io.kotest:kotest-property:$kotest_version"
     testImplementation "io.mockk:mockk:$mockk_version"
 
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutine_version"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutine_version"
+
 
 
 }
