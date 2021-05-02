@@ -20,12 +20,9 @@ class CalculatorViewModelTest : StringSpec({
 
     lateinit var calculatorViewModel: CalculatorViewModel
 
-    val observer: Observer<CalculatorViewModel.States> = mockk<Observer<CalculatorViewModel.States>>()
-    val coroutineDispatcher = TestCoroutineDispatcher()
 
     /*listener(InstantExecutorListener())*/
     beforeEach {
-        Dispatchers.setMain(coroutineDispatcher)
         calculatorViewModel = CalculatorViewModel()
     }
 
@@ -40,7 +37,7 @@ class CalculatorViewModelTest : StringSpec({
     }
 
     "on digit enter it must display number without zero prefix"{
-        coroutineDispatcher.runBlockingTest {
+        runBlocking {
             calculatorViewModel.setAction(CalculatorViewModel.Actions.Start)
             calculatorViewModel.subscribe().first() shouldBe CalculatorViewModel.States.Display("0")
             calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("1"))
@@ -52,7 +49,7 @@ class CalculatorViewModelTest : StringSpec({
     }
 
     "on non digit it must not add to display"{
-        coroutineDispatcher.runBlockingTest {
+        runBlocking {
             calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("+"))
             calculatorViewModel.subscribe().first() shouldNotBe  CalculatorViewModel.States.Display("+")
         }
