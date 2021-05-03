@@ -1,6 +1,7 @@
 package com.artsman.mwidgets
 
 import androidx.lifecycle.Observer
+import app.cash.turbine.FlowTurbine
 import app.cash.turbine.test
 import io.kotest.core.spec.style.StringSpec
 import io.kotest.matchers.should
@@ -66,28 +67,32 @@ class CalculatorViewModelTest : StringSpec({
     "on simple calculation"{
         testCoroutingDispatcher.runBlockingTest {
             calculatorViewModel.subscribe().test {
-                expectItem() shouldBe CalculatorViewModel.States.Display("0")
+                expectAndLog() shouldBe CalculatorViewModel.States.Display("0")
                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("1"))
-                expectItem() shouldBe CalculatorViewModel.States.Display("1")
+                expectAndLog() shouldBe CalculatorViewModel.States.Display("1")
                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("0"))
-                expectItem() shouldBe CalculatorViewModel.States.Display("10")
+                expectAndLog() shouldBe CalculatorViewModel.States.Display("10")
                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("+"))
                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("5"))
-                expectItem() shouldBe CalculatorViewModel.States.Display("5")
+                expectAndLog() shouldBe CalculatorViewModel.States.Display("5")
                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("+"))
-                val expectedResult= expectItem()
-                expectedResult shouldBe CalculatorViewModel.States.Display("15")
+                expectAndLog() shouldBe CalculatorViewModel.States.Display("15")
 
                 //substracting 5 from it now
                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("-"))
-                expectItem() shouldBe CalculatorViewModel.States.Display("15")
                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("5"))
-                expectItem() shouldBe CalculatorViewModel.States.Display("5")
-                calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("="))
-                expectItem() shouldBe CalculatorViewModel.States.Display("10")
+                 expectAndLog() shouldBe CalculatorViewModel.States.Display("5")
+                 calculatorViewModel.setAction(CalculatorViewModel.Actions.Input("="))
+                 expectAndLog() shouldBe CalculatorViewModel.States.Display("10")
                 cancel()
             }
         }
     }
 })
+
+private suspend fun FlowTurbine<CalculatorViewModel.States>.expectAndLog(): CalculatorViewModel.States {
+    val expect=expectItem()
+    println("ExpectItem: ${expect.toString()}")
+    return expect
+}
 
