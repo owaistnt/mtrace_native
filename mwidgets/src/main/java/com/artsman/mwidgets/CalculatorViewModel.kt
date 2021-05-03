@@ -2,13 +2,16 @@ package com.artsman.mwidgets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.*
+import javax.inject.Inject
 
-class CalculatorViewModel(private val calculator: Calculator): ViewModel(){
+class CalculatorViewModel @Inject constructor(private val calculator: Calculator){
     private val mStates= MutableStateFlow<States>(States.Display("0"))
     private val mInputStack= Stack<BigDecimal>()
     private val mOperationStack= Stack<String>()
@@ -18,7 +21,7 @@ class CalculatorViewModel(private val calculator: Calculator): ViewModel(){
     }
 
     fun setAction(action: Actions) {
-        viewModelScope.launch {
+        GlobalScope.launch {
             when(action){
                 Actions.Start -> mStates.value=(States.Display("0"))
                 is Actions.Input -> {
