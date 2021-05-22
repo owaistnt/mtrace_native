@@ -3,6 +3,7 @@ package com.artsman.mwidgets
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.scopes.ViewScoped
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -10,7 +11,6 @@ import kotlinx.coroutines.launch
 import java.math.BigDecimal
 import java.util.*
 import javax.inject.Inject
-
 class CalculatorViewModel @Inject constructor(private val calculator: Calculator){
     private val mStates= MutableStateFlow<States>(States.Display("0"))
     private val mInputStack= Stack<BigDecimal>()
