@@ -1,0 +1,2 @@
+json_key_file("./configs/api-project-305831319790-2522045da22d.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.artsman.mtrace") # e.g. com.krausefx.app
